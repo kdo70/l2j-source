@@ -94,6 +94,9 @@ public class Npc extends Creature
 	private final SiegableHall _siegableHall;
 	
 	private boolean _isCoreAiDisabled;
+
+	private boolean _champion = false;
+	private boolean _isRaid = false;
 	
 	public Npc(int objectId, NpcTemplate template)
 	{
@@ -1485,5 +1488,38 @@ public class Npc extends Creature
 	public void onActiveRegion()
 	{
 		startRandomAnimationTimer();
+	}
+
+
+	public void setChampion(boolean champ)
+	{
+		_champion = champ;
+	}
+
+	public boolean isChampion()
+	{
+		return _champion;
+	}
+
+	public final int getLevel()
+	{
+		return getTemplate().getLevel();
+	}
+
+	/**
+	 * @return True if the L2Character is RaidBoss or his minion.
+	 */
+	public boolean isRaid()
+	{
+		return _isRaid;
+	}
+
+	/**
+	 * Set this Npc as a Raid instance.
+	 * @param isRaid
+	 */
+	public void setIsRaid(boolean isRaid)
+	{
+		_isRaid = isRaid;
 	}
 }

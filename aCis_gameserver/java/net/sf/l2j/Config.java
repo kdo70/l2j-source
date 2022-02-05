@@ -325,6 +325,19 @@ public final class Config
 	public static int MAX_NPC_ANIMATION;
 	public static int MIN_MONSTER_ANIMATION;
 	public static int MAX_MONSTER_ANIMATION;
+
+	/** Monsters are champions */
+	public static int CHAMPION_FREQUENCY; //+
+	public static int CHAMP_MIN_LVL; //+
+	public static int CHAMP_MAX_LVL; //+
+	public static int CHAMPION_HP; //+
+	public static int CHAMPION_REWARDS; //+
+	public static int CHAMPION_ADENAS_REWARDS;  //+
+	public static double CHAMPION_ATK;
+	public static double CHAMPION_SPD_ATK;
+	public static int CHAMPION_REWARD;
+	public static int CHAMPION_REWARD_ID;
+	public static int CHAMPION_REWARD_QTY;
 	
 	// --------------------------------------------------
 	// Players
@@ -949,6 +962,19 @@ public final class Config
 		MAX_NPC_ANIMATION = npcs.getProperty("MaxNPCAnimation", 40);
 		MIN_MONSTER_ANIMATION = npcs.getProperty("MinMonsterAnimation", 10);
 		MAX_MONSTER_ANIMATION = npcs.getProperty("MaxMonsterAnimation", 40);
+
+		// Modification: Monsters are champions
+		CHAMPION_FREQUENCY = npcs.getProperty("ChampionChance", 0);
+		CHAMP_MIN_LVL = npcs.getProperty("ChampionMinLevel", 1);
+		CHAMP_MAX_LVL = npcs.getProperty("ChampionMaxLevel", 90);
+		CHAMPION_HP = npcs.getProperty("ChampionHp", 1);
+		CHAMPION_REWARDS = npcs.getProperty("ChampionRewards", 1);
+		CHAMPION_ADENAS_REWARDS = npcs.getProperty("ChampionAdenaReward", 1);
+		CHAMPION_ATK = npcs.getProperty("ChampionAtk", 1.);
+		CHAMPION_SPD_ATK = npcs.getProperty("ChampionSpdAtk", 1.);
+		CHAMPION_REWARD = npcs.getProperty("ChampionRewardItem", 0);
+		CHAMPION_REWARD_ID = npcs.getProperty("ChampionRewardItemID", 57);
+		CHAMPION_REWARD_QTY = npcs.getProperty("ChampionRewardItemCount", 1);
 	}
 	
 	/**

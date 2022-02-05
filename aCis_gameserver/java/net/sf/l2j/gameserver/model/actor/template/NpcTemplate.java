@@ -69,6 +69,8 @@ public class NpcTemplate extends CreatureTemplate
 	private Castle _castle;
 	private ClanHall _clanHall;
 	private SiegableHall _siegableHall;
+
+	private final boolean _cantBeChampionMonster;
 	
 	public NpcTemplate(StatSet set)
 	{
@@ -89,6 +91,7 @@ public class NpcTemplate extends CreatureTemplate
 		_enchantEffect = set.getInteger("enchant", 0);
 		_corpseTime = set.getInteger("corpseTime", 7);
 		_dropHerbGroup = set.getInteger("dropHerbGroup", 0);
+		_cantBeChampionMonster = _title.equalsIgnoreCase("Quest Monster") || isType("L2Chest");
 		
 		if (set.containsKey("raceId"))
 			setRace(set.getInteger("raceId"));
@@ -558,5 +561,10 @@ public class NpcTemplate extends CreatureTemplate
 			if (type.isMultipleRegistrationAllowed() || list.isEmpty())
 				list.add(quest);
 		}
+	}
+
+	public boolean cantBeChampion()
+	{
+		return _cantBeChampionMonster;
 	}
 }

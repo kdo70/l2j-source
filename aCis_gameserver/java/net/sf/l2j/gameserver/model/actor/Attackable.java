@@ -41,6 +41,9 @@ public class Attackable extends Npc
 	private boolean _isReturningToSpawnPoint;
 	private boolean _seeThroughSilentMove;
 	private boolean _isNoRndWalk;
+
+	private boolean _isRaid;
+	private boolean _isRaidMinion;
 	
 	public Attackable(int objectId, NpcTemplate template)
 	{
@@ -102,6 +105,9 @@ public class Attackable extends Npc
 	@Override
 	public void reduceCurrentHp(double damage, Creature attacker, L2Skill skill)
 	{
+		if (isChampion() && Config.CHAMPION_HP != 0)
+			reduceCurrentHp(damage / Config.CHAMPION_HP, attacker, true, false, skill);
+		else
 		reduceCurrentHp(damage, attacker, true, false, skill);
 	}
 	
@@ -387,5 +393,30 @@ public class Attackable extends Npc
 			// Check if the actor is Aggressive
 			return ((allowPeaceful || isAggressive()) && GeoEngine.getInstance().canSeeTarget(this, target));
 		}
+	}
+
+	public boolean isRaid()
+	{
+		return _isRaid;
+	}
+
+	public void setIsRaid(boolean isRaid)
+	{
+		_isRaid = isRaid;
+	}
+
+	public boolean isRaidMinion()
+	{
+		return _isRaidMinion;
+	}
+
+	/**
+	 * Set this Npc as a Minion instance.
+	 * @param val
+	 */
+	public void setIsRaidMinion(boolean val)
+	{
+		_isRaid = val;
+		_isRaidMinion = val;
 	}
 }

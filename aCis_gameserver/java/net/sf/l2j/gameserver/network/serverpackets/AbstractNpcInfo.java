@@ -104,7 +104,10 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			
 			if (Config.SHOW_NPC_LVL && _npc instanceof Monster)
 				_title = "Lv " + _npc.getStatus().getLevel() + (_npc.getTemplate().getAggroRange() > 0 ? "* " : " ") + _title;
-			
+
+			if (_npc.isChampion())
+				_title = ("Champion");
+
 			// NPC crest system
 			if (Config.SHOW_NPC_CREST && _npc.getCastle() != null && _npc.getCastle().getOwnerId() != 0)
 			{
@@ -174,7 +177,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			writeD(_allyCrest);
 			
 			writeC(_npc.getMove().getMoveType().getId());
-			writeC(0x00);
+			writeC(_npc.isChampion() ? 2 : 0);
 			
 			writeF(_collisionRadius);
 			writeF(_collisionHeight);

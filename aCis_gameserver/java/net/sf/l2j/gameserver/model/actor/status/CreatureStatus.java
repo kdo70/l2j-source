@@ -627,7 +627,14 @@ public class CreatureStatus<T extends Creature>
 	 */
 	public int getMAtk(Creature target, L2Skill skill)
 	{
-		return (int) calcStat(Stats.MAGIC_ATTACK, _actor.getTemplate().getBaseMAtk(), target, skill);
+		double attack = _actor.getTemplate().getBaseMAtk() * ((_actor.isChampion()) ? Config.CHAMPION_ATK : 1);
+
+		// Add the power of the skill to the attack effect
+		if (skill != null)
+			attack += skill.getPower();
+
+		// Calculate modifiers Magic Attack
+		return (int) calcStat(Stats.MAGIC_ATTACK, attack, target, skill);
 	}
 	
 	/**
@@ -635,7 +642,7 @@ public class CreatureStatus<T extends Creature>
 	 */
 	public int getMAtkSpd()
 	{
-		return (int) calcStat(Stats.MAGIC_ATTACK_SPEED, 333.0, null, null);
+		return (int) calcStat(Stats.MAGIC_ATTACK_SPEED, 333.0 * ((_actor.isChampion()) ? Config.CHAMPION_SPD_ATK : 1), null, null);
 	}
 	
 	/**
@@ -655,7 +662,7 @@ public class CreatureStatus<T extends Creature>
 	 */
 	public int getPAtk(Creature target)
 	{
-		return (int) calcStat(Stats.POWER_ATTACK, _actor.getTemplate().getBasePAtk(), target, null);
+		return (int) calcStat(Stats.POWER_ATTACK, _actor.getTemplate().getBasePAtk() * ((_actor.isChampion()) ? Config.CHAMPION_ATK : 1), target, null);
 	}
 	
 	/**
@@ -663,7 +670,7 @@ public class CreatureStatus<T extends Creature>
 	 */
 	public int getPAtkSpd()
 	{
-		return (int) calcStat(Stats.POWER_ATTACK_SPEED, _actor.getTemplate().getBasePAtkSpd(), null, null);
+		return (int) calcStat(Stats.POWER_ATTACK_SPEED, _actor.getTemplate().getBasePAtkSpd() * ((_actor.isChampion()) ? Config.CHAMPION_SPD_ATK : 1), null, null);
 	}
 	
 	/**

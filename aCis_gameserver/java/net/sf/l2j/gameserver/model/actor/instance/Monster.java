@@ -163,6 +163,12 @@ public class Monster extends Attackable
 					
 					long exp = expSp[0];
 					int sp = expSp[1];
+
+					if (isChampion())
+					{
+						exp *= Config.CHAMPION_REWARDS;
+						sp *= Config.CHAMPION_REWARDS;
+					}
 					
 					exp *= 1 - penalty;
 					
@@ -234,6 +240,12 @@ public class Monster extends Attackable
 				final int[] expSp = calculateExpAndSp(levelDiff, partyDmg, totalDamage);
 				long exp = expSp[0];
 				int sp = expSp[1];
+
+				if (isChampion())
+				{
+					exp *= Config.CHAMPION_REWARDS;
+					sp *= Config.CHAMPION_REWARDS;
+				}
 				
 				exp *= partyMul;
 				sp *= partyMul;
@@ -551,7 +563,10 @@ public class Monster extends Attackable
 			dropChance *= Config.RATE_DROP_SPOIL;
 		else
 			dropChance *= (isRaidBoss()) ? Config.RATE_DROP_ITEMS_BY_RAID : Config.RATE_DROP_ITEMS;
-		
+
+		if (isChampion())
+			dropChance *= Config.CHAMPION_REWARDS;
+
 		// Set our limits for chance of drop
 		if (dropChance < 1)
 			dropChance = 1;
@@ -578,7 +593,11 @@ public class Monster extends Attackable
 			// Prepare for next iteration if dropChance > DropData.MAX_CHANCE
 			dropChance -= DropData.MAX_CHANCE;
 		}
-		
+
+		if (isChampion())
+			if (drop.getItemId() == 57 || (drop.getItemId() >= 6360 && drop.getItemId() <= 6362))
+				itemCount *= Config.CHAMPION_ADENAS_REWARDS;
+
 		if (itemCount > 0)
 			return new IntIntHolder(drop.getItemId(), itemCount);
 		
@@ -614,6 +633,9 @@ public class Monster extends Attackable
 		
 		// Applies Drop rates
 		categoryDropChance *= (isRaidBoss()) ? Config.RATE_DROP_ITEMS_BY_RAID : Config.RATE_DROP_ITEMS;
+
+		if (isChampion())
+			categoryDropChance *= Config.CHAMPION_REWARDS;
 		
 		// Set our limits for chance of drop
 		if (categoryDropChance < 1)
@@ -643,7 +665,10 @@ public class Monster extends Attackable
 				dropChance *= Config.RATE_DROP_ADENA;
 			else
 				dropChance *= (isRaidBoss()) ? Config.RATE_DROP_ITEMS_BY_RAID : Config.RATE_DROP_ITEMS;
-			
+
+			if (isChampion())
+				dropChance *= Config.CHAMPION_REWARDS;
+
 			if (dropChance < DropData.MAX_CHANCE)
 				dropChance = DropData.MAX_CHANCE;
 			
@@ -669,7 +694,11 @@ public class Monster extends Attackable
 				// Prepare for next iteration if dropChance > DropData.MAX_CHANCE
 				dropChance -= DropData.MAX_CHANCE;
 			}
-			
+
+			if (isChampion())
+				if (drop.getItemId() == 57 || (drop.getItemId() >= 6360 && drop.getItemId() <= 6362))
+					itemCount *= Config.CHAMPION_ADENAS_REWARDS;
+
 			if (itemCount > 0)
 				return new IntIntHolder(drop.getItemId(), itemCount);
 		}
@@ -863,6 +892,30 @@ public class Monster extends Attackable
 					continue;
 				
 				dropOrAutoLootItem(player, holder, true);
+			}
+		}
+
+		// Apply special item drop for champions.
+		if (isChampion() && Config.CHAMPION_REWARD > 0)
+		{
+			int dropChance = Config.CHAMPION_REWARD;
+
+			// Apply level modifier, if any/wanted.
+			if (Config.DEEPBLUE_DROP_RULES)
+			{
+				int deepBlueDrop = (levelModifier > 0) ? 3 : 1;
+
+				// Check if we should apply our maths so deep blue mobs will not drop that easy.
+				dropChance = ((Config.CHAMPION_REWARD - ((Config.CHAMPION_REWARD * levelModifier) / 100)) / deepBlueDrop);
+			}
+
+			if (Rnd.get(100) < dropChance)
+			{
+				final IntIntHolder item = new IntIntHolder(Config.CHAMPION_REWARD_ID, Math.max(1, Rnd.get(1, Config.CHAMPION_REWARD_QTY)));
+				if (Config.AUTO_LOOT)
+					player.addItem("ChampionLoot", item.getId(), item.getValue(), this, true);
+				else
+					dropItem(player, item);
 			}
 		}
 		
