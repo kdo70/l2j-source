@@ -7,6 +7,8 @@ import net.sf.l2j.commons.pool.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.commons.util.ArraysUtil;
 
+import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
+import net.sf.l2j.gameserver.skills.L2Skill;
 import net.sf.l2j.gameserver.data.SkillTable.FrequentSkill;
 import net.sf.l2j.gameserver.data.sql.SpawnTable;
 import net.sf.l2j.gameserver.data.xml.NewbieBuffData;
@@ -460,10 +462,15 @@ public class NewbieHelper extends Quest
 				htmltext = "guide_for_newbie003.htm";
 			else
 			{
+				//visual effect
+				player.broadcastPacket(new MagicSkillUse(npc, player, 1036, 1, 1000, 0));
+
 				// Go through the NewbieBuff List and cast skills.
 				int i = 0;
-				for (NewbieBuffHolder buff : NewbieBuffData.getInstance().getValidBuffs(isMage, playerLevel))
-					ThreadPool.schedule(() -> callSkill(player, player, buff.getSkill()), 1000 * i++);
+				for (NewbieBuffHolder buff : NewbieBuffData.getInstance().getValidBuffs(isMage, playerLevel)){
+					final L2Skill skill = buff.getSkill();
+					skill.getEffects(npc, player);
+				}
 				
 				return null;
 			}
